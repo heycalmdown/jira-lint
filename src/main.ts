@@ -32,7 +32,7 @@ const getInputs = (): JIRALintActionInputs => {
   const PR_THRESHOLD = parseInt(core.getInput('pr-threshold', { required: false }), 10);
   const VALIDATE_ISSUE_STATUS: boolean = core.getInput('validate_issue_status', { required: false }) === 'true';
   const ALLOWED_ISSUE_STATUSES: string = core.getInput('allowed_issue_statuses');
-  const SKIP_PR_THRESHOLD: boolean = core.getInput('skip-pr-threshold', { required: false });
+  const SKIP_PR_THRESHOLD: boolean = core.getInput('skip-pr-threshold', { required: false }) === 'true';
 
   return {
     JIRA_TOKEN,
@@ -63,8 +63,6 @@ async function run(): Promise<void> {
 
     const defaultAdditionsCount = 800;
     const prThreshold: number = PR_THRESHOLD ? Number(PR_THRESHOLD) : defaultAdditionsCount;
-
-    core.info("SKIP_PR_THRESHOLD ", SKIP_PR_THRESHOLD);
 
     const {
       payload: {
