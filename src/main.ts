@@ -64,6 +64,9 @@ async function run(): Promise<void> {
     const defaultAdditionsCount = 800;
     const prThreshold: number = PR_THRESHOLD ? Number(PR_THRESHOLD) : defaultAdditionsCount;
 
+    console.log("core.getInput", core.getInput('skip-pr-threshold', { required: false }));
+    console.log("core.getInput === 'true'", core.getInput('skip-pr-threshold', { required: false }) === 'true');
+    console.log("SKIP_PR_THRESHOLD ", SKIP_PR_THRESHOLD);
     const {
       payload: {
         repository,
