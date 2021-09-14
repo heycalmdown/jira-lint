@@ -26,6 +26,15 @@ export const getJIRAIssueKeys = (input: string): string[] => {
   } else return [];
 };
 
+/** Extract JIRA issue keys from a string. */
+export const getJIRAIssueKeysWithPrefix = (prefix: string, input: string): string[] => {
+  const regex = new RegExp(`d+-(${prefix})`, 'g'); // /\d+-(${prefix})/g;
+  const matches = reverseString(input).toUpperCase().match(regex);
+  if (matches?.length) {
+    return matches.map(reverseString).reverse();
+  } else return [];
+};
+
 export const LABELS = {
   HOTFIX_PRE_PROD: 'HOTFIX-PRE-PROD',
   HOTFIX_PROD: 'HOTFIX-PROD',

@@ -19,6 +19,7 @@ import {
   updatePrDetails,
   isIssueStatusValid,
   getInvalidIssueStatusComment,
+  getJIRAIssueKeysWithPrefix,
 } from './utils';
 import { PullRequestParams, JIRADetails, JIRALintActionInputs } from './types';
 import { DEFAULT_PR_ADDITIONS_THRESHOLD } from './constants';
@@ -33,6 +34,7 @@ const getInputs = (): JIRALintActionInputs => {
   const VALIDATE_ISSUE_STATUS: boolean = core.getInput('validate_issue_status', { required: false }) === 'true';
   const ALLOWED_ISSUE_STATUSES: string = core.getInput('allowed_issue_statuses');
   const SKIP_PR_THRESHOLD: boolean = core.getInput('skip-pr-threshold', { required: false }) === 'true';
+  const JIRA_PREFIX: string = core.getInput('jira-prefix', { required: false });
 
   return {
     JIRA_TOKEN,
@@ -44,6 +46,7 @@ const getInputs = (): JIRALintActionInputs => {
     VALIDATE_ISSUE_STATUS,
     ALLOWED_ISSUE_STATUSES,
     SKIP_PR_THRESHOLD,
+    JIRA_PREFIX,
   };
 };
 
@@ -59,6 +62,7 @@ async function run(): Promise<void> {
       VALIDATE_ISSUE_STATUS,
       ALLOWED_ISSUE_STATUSES,
       SKIP_PR_THRESHOLD,
+      JIRA_PREFIX,
     } = getInputs();
 
     const defaultAdditionsCount = 800;
@@ -117,7 +121,12 @@ async function run(): Promise<void> {
       process.exit(0);
     }
 
-    const issueKeys = getJIRAIssueKeys(headBranch);
+    let issueKeys;
+    if (JIRA_PREFIX === '') {
+      issueKeys = getJIRAIssueKeys(headBranch);
+    } else {
+      issueKeys = getJIRAIssueKeysWithPrefix(JIRA_PREFIX, headBranch);
+    }
     if (!issueKeys.length) {
       const comment: IssuesCreateCommentParams = {
         ...commonPayload,

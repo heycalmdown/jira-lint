@@ -37,6 +37,9 @@ inputs:
     description: 'A boolean if set to true, will skip checking PR threshold'
     required: false
     default: false
+  jira-prefix:
+    description: 'A pipe seperated list of prefix for jira ticket. ex. TSE|TTP'
+    required: false
 
 runs:
   using: 'node12'
