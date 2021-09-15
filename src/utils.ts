@@ -28,7 +28,8 @@ export const getJIRAIssueKeys = (input: string): string[] => {
 
 /** Extract JIRA issue keys from a string. */
 export const getJIRAIssueKeysWithPrefix = (prefix: string, input: string): string[] => {
-  const regex = new RegExp(`d+-(${prefix})`, 'g'); // /\d+-(${prefix})/g;
+  const reversedPrefix = reverseString(prefix)
+  const regex = new RegExp(`\\d+-(${reversedPrefix})`, 'g'); // /\d+-(${prefix})/g;
   const matches = reverseString(input).toUpperCase().match(regex);
   if (matches?.length) {
     return matches.map(reverseString).reverse();
